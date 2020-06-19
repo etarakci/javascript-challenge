@@ -1,19 +1,24 @@
+// og version
+
 var tableData = data;
-var tableBody = d3.select("#ufo-table-body");
+var tableBody = document.querySelector("#ufo-table-body");
 
 function generateTableBody(data,table){
     data.forEach((sighting) => {
-        var row = table.append("tr");
+        let row = table.insertRow();
         Object.values(sighting).forEach((value) => {
-            var cell = row.append("td");
-            cell.text(value);
+            let th = document.createElement("th");
+            let text = document.createTextNode(value);
+            th.appendChild(text);
+            row.appendChild(th);
         })
     })
 }
 generateTableBody(tableData,tableBody);
 
-function clearTableBody() {
-    d3.select("#ufo-table-body").selectAll("tr").remove();
+function clearTableBody(table) {
+    table.remove();
+    // PROBLEM: this deletes #ufo-table-body from HTML, preventing from generating new table
     console.log("Cleared table contents.");
 }
 
@@ -25,17 +30,17 @@ function filterSightings(){
         // hard coded placeholder
         date = "1/11/2011";
     }
-    // console.log(date);
+    console.log(date);
 
     // how to clear out existing table data? *make own function and call here
-    clearTableBody();
+    clearTableBody(tableBody);
 
     // filter data 
     // var tableData = data;
     var filteredData = tableData.filter(sighting => {
         return sighting.datetime === date;
     });
-    // console.log(filteredData);
+    console.log(filteredData);
 
     if (!filteredData.length){
         console.log("There are no sightings on that date.")
